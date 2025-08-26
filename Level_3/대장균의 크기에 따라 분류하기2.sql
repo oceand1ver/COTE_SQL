@@ -1,0 +1,15 @@
+SELECT T.ID,
+    CASE
+        WHEN T.QUANT = 1 THEN 'CRITICAL'
+        WHEN T.QUANT = 2 THEN 'HIGH'
+        WHEN T.QUANT = 3 THEN 'MEDIUM'
+        ELSE 'LOW'
+    END AS COLONY_NAME
+FROM (
+        SELECT ID,
+            NTILE(4) OVER (
+                ORDER BY SIZE_OF_COLONY DESC
+            ) AS QUANT
+        FROM ECOLI_DATA E
+    ) T
+ORDER BY T.ID ASC;
